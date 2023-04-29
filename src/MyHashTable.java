@@ -1,9 +1,6 @@
 import java.util.ArrayList;
 
 public class MyHashTable<K,V> {
-    private ArrayList<HashNode<K, V>> myArr;
-    private int index;
-    private int size;
     private class HashNode<K, V>{
         private K key;
         private V value;
@@ -20,15 +17,18 @@ public class MyHashTable<K,V> {
         }
     }
     private HashNode<K, V>[] chainArray; // or Object[]
+    private int M = 11;
+    private int size;
     public MyHashTable() {
-        myArr = new ArrayList<>();
-        size = 0;
-        index = 0;
+        chainArray = new HashNode[M];
     }
-    public MyHashTable(int M) {}
+    public MyHashTable(int M) {
+        this.M = M;
+        chainArray = new HashNode[M];
+    }
     private int hash(K key) {}
     public void put(K key, V value) {}
-    public V get(K key) {return }
+    public V get(K key) {}
     public boolean contains(V value) {}
     public K getKey(V value) {}
 }
