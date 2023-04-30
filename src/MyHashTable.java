@@ -1,9 +1,9 @@
 public class MyHashTable<K,V> {
     // Inner class for linked list node
-    private static class ListNode {
-        String key;
-        String value;
-        ListNode next;
+    private static class ListNode<K,V> {
+        K key;
+        V value;
+        ListNode<K,V> next;
     }
 
     // Array of linked lists
@@ -19,7 +19,7 @@ public class MyHashTable<K,V> {
     // Constructor with initial size parameter
     public MyHashTable(int initialSize) {
         if (initialSize <= 0)
-            throw new IllegalArgumentException("Illegal table size");
+            throw new IllegalArgumentException("Illegal array size");
         chainArray = new ListNode[initialSize];
     }
 
@@ -28,12 +28,11 @@ public class MyHashTable<K,V> {
     }
 
     private void expandTable() {
-        ListNode[] newtable = new ListNode[chainArray.length*2];
+        ListNode<K,V>[] newtable = new ListNode[chainArray.length*2];
         for (int i = 0; i < chainArray.length; i++) {
-
-            ListNode list = chainArray[i];
+            ListNode<K,V> list = chainArray[i];
             while (list != null) {
-                ListNode next = list.next;
+                ListNode<K,V> next = list.next;
                 int hash = (Math.abs(list.key.hashCode())) % newtable.length;
                 list.next = newtable[hash];
                 newtable[hash] = list;
@@ -42,6 +41,7 @@ public class MyHashTable<K,V> {
         }
         chainArray = newtable;
     }
+
 
     public void put(K key, V value) {
         // Check for null key
@@ -74,16 +74,15 @@ public class MyHashTable<K,V> {
             chainArray[bucket] = newNode;
             size++;  // Count the newly added key.
         }
-        size++;
     }
 
     // Returns the value associated with the given key
-    public String get(String key) {
+    public V get(K key) {
         // Determine which bucket to look in
-        int bucket = hash((K) key);
+        int bucket = hash(key);
 
         // Traverse the linked list at the bucket location to find the key-value pair
-        ListNode list = chainArray[bucket];  // For traversing the list.
+        ListNode<K,V> list = chainArray[bucket];  // For traversing the list.
         while (list != null) {
             if (list.key.equals(key))
                 return list.value;
@@ -91,11 +90,12 @@ public class MyHashTable<K,V> {
         }
         return null; // If key not found, return null
     }
-    public boolean containsKey(String key) {
 
-        int bucket = hash((K) key);
+    public boolean containsKey(K key) {
 
-        ListNode list = chainArray[bucket];
+        int bucket = hash(key);
+
+        ListNode<K,V> list = chainArray[bucket];
         while (list != null) {
             if (list.key.equals(key))
                 return true;
@@ -106,12 +106,13 @@ public class MyHashTable<K,V> {
     }
 
     public K getKey(V value) {
-        for (ListNode node : chainArray) {
-            while (node != null) {
-                if (node.value.equals(value)) {
-                    return (K) node.key;
+        for (ListNode<K,V> node : chainArray) {
+            ListNode<K,V> current = node;
+            while (current != null) {
+                if (current.value.equals(value)) {
+                    return current.key;
                 }
-                node = node.next;
+                current = current.next;
             }
         }
         return null;
