@@ -26,9 +26,54 @@ public class MyHashTable<K,V> {
     private int hash(K key) {
         return Math.abs(key.hashCode() % chainArray.length);
     }
+
+    private void expandTable() {
+        ListNode[] newtable = new ListNode[chainArray.length*2];
+        for (int i = 0; i < chainArray.length; i++) {
+
+            ListNode list = chainArray[i];
+            while (list != null) {
+                ListNode next = list.next;
+                int hash = (Math.abs(list.key.hashCode())) % newtable.length;
+                list.next = newtable[hash];
+                newtable[hash] = list;
+                list = next;
+            }
+        }
+        chainArray = newtable;
+    }
+
     public void put(K key, V value) {
+        // Check for null key
+        assert key != null : "The key must be non-null";
 
+        // Determine which bucket to put the key-value pair in
+        int bucket = hash(key);
 
+        // Traverse the linked list at the bucket location to see if key already exists
+        ListNode list = chainArray[bucket];
+        while (list != null) {
+            if (list.key.equals(key))
+                break;
+            list = list.next;
+        }
+
+        // If the key already exists, update the value
+        if (list != null) {
+            list.value = (String) value;
+        } else { // Otherwise, add the new key-value pair to the table
+            // Check if the table needs to be resized
+            if (size >= 0.75* chainArray.length) {
+                expandTable();
+                bucket = hash(key);
+            }
+            ListNode newNode = new ListNode();
+            newNode.key = (String) key;
+            newNode.value = (String) value;
+            newNode.next = chainArray[bucket];
+            chainArray[bucket] = newNode;
+            size++;  // Count the newly added key.
+        }
         size++;
     }
 
@@ -60,7 +105,17 @@ public class MyHashTable<K,V> {
         return false;
     }
 
-    public K getKey(V value) {}
+    public K getKey(V value) {
+        for (ListNode node : chainArray) {
+            while (node != null) {
+                if (node.value.equals(value)) {
+                    return (K) node.key;
+                }
+                node = node.next;
+            }
+        }
+        return null;
+    }
     public int size() {
         return size;
     }
