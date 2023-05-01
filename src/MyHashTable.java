@@ -1,12 +1,17 @@
 public class MyHashTable<K,V> {
     // Inner class for linked list node
-    private static class ListNode<K,V> {
+    static class ListNode<K,V> {
+        public ListNode<K,V> next;
         K key;
         V value;
-        ListNode<K,V> next;
+        public ListNode(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
     }
 
-    private ListNode[] chainArray; // Array of linked lists
+    ListNode<K,V>[] chainArray;
+    // Array of linked lists
     private final int M = 11; // Default number of chains
     private int size; // size of pair key & value
 
@@ -28,6 +33,7 @@ public class MyHashTable<K,V> {
 
     private void expandTable() {
         ListNode<K,V>[] newtable = new ListNode[chainArray.length*2];
+        size = 0;
         for (int i = 0; i < chainArray.length; i++) {
             ListNode<K,V> list = chainArray[i];
             while (list != null) {
@@ -36,6 +42,7 @@ public class MyHashTable<K,V> {
                 list.next = newtable[hash];
                 newtable[hash] = list;
                 list = next;
+                size++;
             }
         }
         chainArray = newtable;
@@ -48,7 +55,7 @@ public class MyHashTable<K,V> {
         // Determine which bucket to put the key-value pair in
         int bucket = hash(key);
 
-        ListNode list = chainArray[bucket];
+        ListNode<K,V> list = chainArray[bucket];
         // check if there is needed key
         while (list != null) {
             if (list.key.equals(key))
@@ -58,16 +65,14 @@ public class MyHashTable<K,V> {
 
         // If the key already exists, update the value
         if (list != null) {
-            list.value = (String) value;
+            list.value = value;
         } else {
             // Check if the table needs to be resized
             if (size >= 0.75* chainArray.length) {
                 expandTable();
                 bucket = hash(key);
             }
-            ListNode newNode = new ListNode();
-            newNode.key = key;
-            newNode.value = value;
+            ListNode<K,V> newNode = new ListNode<>(key, value);
             newNode.next = chainArray[bucket];
             chainArray[bucket] = newNode;
             size++;  // Count the newly added key.
@@ -120,5 +125,9 @@ public class MyHashTable<K,V> {
     // Return the current size of a chainArray
     public int size() {
         return size;
+    }
+
+    public ListNode<K,V>[] getChainArray() {
+        return chainArray;
     }
 }
