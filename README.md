@@ -14,16 +14,18 @@ how the chaining strategy handles collisions.
 
 MyHashTable class:
 Overall, 10 methods contained
-remove
-clear
-put
-getKey
-hash
-expandTable
-get
-containsKey
-getChainArray
-size
+remove type: void. It make the the given key place be removed and size is decresed by 1.
+clear type: void. It make all indexes of a chainArray equals to null.
+put type: void. It added an element to the chainArray and size is incremented.
+getKey type: K. returns the key is it found thought interation in while condition, but if it is not found
+returns null
+hash type: int. It returns return Math.abs(key.hashCode() % chainArray.length);
+expandTable type: void. It expands the size of the chainArray
+get type: V. returns the value is it found thought interation in while condition, but if it is not found
+returns null
+containsKey type: boolean. It has identical function as get by checking by while condition if chainArray consists of the given array it returns true, otherwise, false.
+getChainArray type: ListNode<K, V>[]. Returns the chainArray.
+size type: int. It returns the private variable size that goes through each methods as remove or put, expandTable. Returns the current size of chainArray.
 
 Main class:
 created table object of MyHashTable with key&value: Testing, MobilePhone
