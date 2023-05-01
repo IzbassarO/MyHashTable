@@ -10,6 +10,15 @@ public class Main {
             table.put(key, value);
         }
 
-
+        // Print the number of elements in each bucket
+        for (int i = 0; i < table.getChainArray().length; i++) {
+            MyHashTable.ListNode<Testing, MobilePhone> list = table.getChainArray()[i];
+            int count = 0;
+            while (list != null) {
+                count++;
+                list = list.next;
+            }
+            System.out.println("Bucket " + i + ": " + count + " elements");
+        }
     }
 }
