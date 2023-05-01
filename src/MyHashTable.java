@@ -6,9 +6,8 @@ public class MyHashTable<K,V> {
         ListNode<K,V> next;
     }
 
-    // Array of linked lists
-    private ListNode[] chainArray;
-    private int M = 11; // Default number of chains
+    private ListNode[] chainArray; // Array of linked lists
+    private final int M = 11; // Default number of chains
     private int size; // size of pair key & value
 
     // Default constructor initializes table with size 11
@@ -42,7 +41,6 @@ public class MyHashTable<K,V> {
         chainArray = newtable;
     }
 
-
     public void put(K key, V value) {
         // Check for null key
         assert key != null : "The key must be non-null";
@@ -50,8 +48,8 @@ public class MyHashTable<K,V> {
         // Determine which bucket to put the key-value pair in
         int bucket = hash(key);
 
-        // Traverse the linked list at the bucket location to see if key already exists
         ListNode list = chainArray[bucket];
+        // check if there is needed key
         while (list != null) {
             if (list.key.equals(key))
                 break;
@@ -61,15 +59,15 @@ public class MyHashTable<K,V> {
         // If the key already exists, update the value
         if (list != null) {
             list.value = (String) value;
-        } else { // Otherwise, add the new key-value pair to the table
+        } else {
             // Check if the table needs to be resized
             if (size >= 0.75* chainArray.length) {
                 expandTable();
                 bucket = hash(key);
             }
             ListNode newNode = new ListNode();
-            newNode.key = (String) key;
-            newNode.value = (String) value;
+            newNode.key = key;
+            newNode.value = value;
             newNode.next = chainArray[bucket];
             chainArray[bucket] = newNode;
             size++;  // Count the newly added key.
@@ -78,11 +76,9 @@ public class MyHashTable<K,V> {
 
     // Returns the value associated with the given key
     public V get(K key) {
-        // Determine which bucket to look in
         int bucket = hash(key);
 
-        // Traverse the linked list at the bucket location to find the key-value pair
-        ListNode<K,V> list = chainArray[bucket];  // For traversing the list.
+        ListNode<K,V> list = chainArray[bucket];
         while (list != null) {
             if (list.key.equals(key))
                 return list.value;
@@ -90,12 +86,13 @@ public class MyHashTable<K,V> {
         }
         return null; // If key not found, return null
     }
-
+    // Returns true / false if the given key is in chainArray
     public boolean containsKey(K key) {
 
         int bucket = hash(key);
 
         ListNode<K,V> list = chainArray[bucket];
+        // check if there is needed key
         while (list != null) {
             if (list.key.equals(key))
                 return true;
@@ -105,9 +102,11 @@ public class MyHashTable<K,V> {
         return false;
     }
 
+    // Returns the key of the given value
     public K getKey(V value) {
         for (ListNode<K,V> node : chainArray) {
             ListNode<K,V> current = node;
+            // check if there is needed key
             while (current != null) {
                 if (current.value.equals(value)) {
                     return current.key;
@@ -117,6 +116,8 @@ public class MyHashTable<K,V> {
         }
         return null;
     }
+
+    // Return the current size of a chainArray
     public int size() {
         return size;
     }
