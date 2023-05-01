@@ -26,6 +26,8 @@ public class Main {
             table.remove(key);
         }
 
+        System.out.println("Is current table empty? " + table.isEmpty());
+        System.out.println("After clearing table:");
         // Remove all elements from the hash table
         table.clear();
 
