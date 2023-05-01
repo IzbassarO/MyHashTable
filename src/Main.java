@@ -20,5 +20,21 @@ public class Main {
             }
             System.out.println("Bucket " + i + ": " + count + " elements");
         }
+        // Remove all elements from the hash table
+        for (int i = 0; i < 10000; i++) {
+            Testing key = new Testing(i);
+            table.remove(key);
+        }
+
+        // for checking if all elements are removed
+//        for (int i = 0; i < table.getChainArray().length; i++) {
+//            MyHashTable.ListNode<Testing, MobilePhone> list = table.getChainArray()[i];
+//            int count = 0;
+//            while (list != null) {
+//                count++;
+//                list = list.next;
+//            }
+//            System.out.println("Bucket " + i + ": " + count + " elements");
+//        }
     }
 }

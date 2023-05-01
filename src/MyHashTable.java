@@ -130,4 +130,31 @@ public class MyHashTable<K,V> {
     public ListNode<K,V>[] getChainArray() {
         return chainArray;
     }
+    // Clears all the key-value pairs from the table
+    public void clear() {
+        for (int i = 0; i < chainArray.length; i++) {
+            chainArray[i] = null;
+        }
+        size = 0;
+    }
+    // Removes the key-value pair associated with the given key
+    public void remove(K key) {
+        int bucket = hash(key);
+
+        ListNode<K,V> list = chainArray[bucket];
+        ListNode<K,V> prev = null;
+        while (list != null) {
+            if (list.key.equals(key)) {
+                if (prev == null) {
+                    chainArray[bucket] = list.next;
+                } else {
+                    prev.next = list.next;
+                }
+                size--;  // Decrement the size of the table
+                return;
+            }
+            prev = list;
+            list = list.next;  // Move on to next node in the list.
+        }
+    }
 }
