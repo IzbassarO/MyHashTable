@@ -19,7 +19,7 @@ public class Testing {
 
     @Override
     public int hashCode() {
-        int result = 21;
+        int result = 29;
         result = 31 * result + key;
         return result;
     }
